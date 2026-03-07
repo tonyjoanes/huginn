@@ -1,0 +1,44 @@
+You are a swing trading research analyst. Analyse the following stock opportunity.
+
+## Signal
+{{.Signal.Type}}: {{.Signal.Description}}
+Triggered: {{formatDate .Signal.DetectedAt}}
+
+## Company Overview
+Ticker: {{.Signal.Ticker}}{{if .Fundamentals}} | Sector: {{.Fundamentals.Sector}} | Market Cap: {{formatCurrency .Fundamentals.MarketCap}}
+Current Price: ${{printf "%.2f" .Fundamentals.CurrentPrice}} | 52-Week Range: ${{printf "%.2f" .Fundamentals.Low52W}} - ${{printf "%.2f" .Fundamentals.High52W}}{{end}}
+
+## Recent Price Action
+{{if .Candles}}{{formatOHLCV .Candles}}
+Average Daily Volume (20d): {{formatVolume .AvgVolume}}
+Today's Volume: {{formatVolume .TodayVolume}}{{else}}Price data unavailable.{{end}}
+
+## Key Fundamentals
+{{if .Fundamentals}}Revenue (TTM): {{formatCurrency .Fundamentals.Revenue}} | Revenue Growth: {{printf "%.1f" .Fundamentals.RevenueGrowth}}%
+EPS (TTM): ${{printf "%.2f" .Fundamentals.EPS}} | P/E: {{printf "%.1f" .Fundamentals.PE}} | Forward P/E: {{printf "%.1f" .Fundamentals.ForwardPE}}
+Gross Margin: {{printf "%.1f" .Fundamentals.GrossMargin}}% | Operating Margin: {{printf "%.1f" .Fundamentals.OpMargin}}%
+Debt/Equity: {{printf "%.2f" .Fundamentals.DE}} | Free Cash Flow: {{formatCurrency .Fundamentals.FCF}}{{else}}Fundamental data unavailable.{{end}}
+
+## Recent News / Catalyst
+{{if .News}}{{range .News}}- [{{formatDate .Published}}] {{.Headline}}{{if .Source}} ({{.Source}}){{end}}
+{{end}}{{else}}No recent news available.{{end}}
+
+## Insider Activity (if applicable)
+{{if .Insiders}}{{range .Insiders}}- {{formatDate .Date}} | {{.InsiderName}} ({{.Title}}) {{if eq .TransactionType "P"}}BOUGHT{{else}}SOLD{{end}} {{formatVolume64 .Shares}} shares @ ${{printf "%.2f" .Price}}
+{{end}}{{else}}No recent insider transactions.{{end}}
+
+---
+
+Provide your analysis in this exact structure:
+
+1. THESIS (2-3 sentences: what's the opportunity and why now)
+2. BULL CASE (3 key reasons this works)
+3. BEAR CASE (3 key risks)
+4. CONVICTION SCORE (1-10, where 10 = highest conviction)
+5. TRADE PLAN:
+   - Entry: suggested price or range
+   - Stop Loss: price level and % from entry
+   - Target 1: price and % gain
+   - Target 2: price and % gain (stretch)
+   - Time Horizon: expected hold period
+6. VERDICT: BUY / WATCHLIST / SKIP

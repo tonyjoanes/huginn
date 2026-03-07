@@ -1,0 +1,38 @@
+api_keys:
+  finnhub: "your-finnhub-key-here"
+  fmp: "your-fmp-key-here"
+  alpha_vantage: "your-alphavantage-key-here"
+  claude: "your-anthropic-key-here"
+
+claude:
+  model: "claude-sonnet-4-20250514"
+  max_tokens: 2000
+  prompt_template: "prompts/analysis.tmpl"
+
+universe:
+  source: "file"
+  file: "universe.json"
+  min_market_cap: 2000000000
+
+signals:
+  volume_anomaly:
+    enabled: true
+    volume_multiplier: 2.5
+    min_price_change: 0.02
+  earnings_surprise:
+    enabled: true
+    min_surprise_pct: 10.0
+    lookback_days: 7
+  insider_buying:
+    enabled: true
+    min_insiders: 2
+    lookback_days: 30
+    exclude_10b5_1: true
+
+output:
+  format: "table"
+  max_results: 20
+  min_conviction: 5
+
+storage:
+  path: "~/.huginn/history.db"
